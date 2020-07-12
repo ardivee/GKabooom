@@ -18,11 +18,18 @@
             background: url('assets/bg.png');
             background-size: 100% 100%;
         }
+
+        .bottom-right {
+            position: absolute;
+            bottom: 8px;
+            right: 16px;
+        }
     </style>
 </head>
 
 <body>
     <canvas id="canvas"></canvas>
+    <img src="assets/fullscreen_btn.png" id="fullscreen" class="bottom-right" />
 
     <script>
         // Holds info about the Image Source
@@ -45,6 +52,9 @@
         // Get the canvas and context
         var canvas = document.getElementById("canvas");
         var ctx = canvas.getContext("2d");
+
+        // Get the fullscreen button
+        var fullScreenBtn = document.getElementById("fullscreen");
 
         // All dem image sources
         var imageSources = [
@@ -72,7 +82,7 @@
             image.src = src;
 
             image.onload = function () {
-                var location = new LocationArea(this, x * scaleX, y * scaleY, this.width * scaleX, this.height * scaleY);
+                var location = new LocationArea(this, x, y, this.width, this.height);
                 locations.push(location);
             }
         }
@@ -88,21 +98,42 @@
             var clickY = event.pageY - this.offsetTop;
 
             for (var i = 0; i < locations.length; i++) {
-                if (clickX < locations[i].right && clickX > locations[i].left && clickY > locations[i].top && clickY < locations[i].bottom && !locations[i].visible) {
+                if (clickX < locations[i].right * scaleX && clickX > locations[i].left * scaleX && clickY > locations[i].top * scaleY && clickY < locations[i].bottom * scaleY && !locations[i].visible) {
 
                     locations[i].visible = true;
 
-                    ctx.drawImage(locations[i].img, locations[i].left, locations[i].top, locations[i].img.width * scaleX, locations[i].img.height * scaleY);
+                    ctx.drawImage(locations[i].img, locations[i].left * scaleX, locations[i].top * scaleY, locations[i].img.width * scaleX, locations[i].img.height * scaleY);
 
                     ctx.font = 100 * scaleY + "px Arial";
                     ctx.fillStyle = "red";
                     ctx.textAlign = "center";
 
-                    ctx.fillText(locationNumber++, locations[i].left + (locations[i].img.width * scaleX / 2), locations[i].top + locations[i].img.height * scaleY / 2);
+                    ctx.fillText(locationNumber++, (locations[i].left * scaleX) + (locations[i].img.width * scaleX / 2), (locations[i].top * scaleY) + locations[i].img.height * scaleY / 2);
 
                     break;
                 }
             }
+        });
+
+        // Watch for fullscreen click event
+        fullScreenBtn.addEventListener("click", function (event) {
+            if (canvas.webkitRequestFullScreen) {
+                canvas.webkitRequestFullScreen();
+            }
+            else {
+                canvas.mozRequestFullScreen();
+            }
+        });
+
+        // Watch for resize event
+        window.addEventListener('resize', function (event) {
+            // Rescale to fit window
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            // Default size is 2048 / 1024
+            scaleX = canvas.width / 2048;
+            scaleY = canvas.height / 1024;
         });
     </script>
 </body>

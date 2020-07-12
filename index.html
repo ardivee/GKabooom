@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
     <title>GKabooom</title>
     <meta name="author" content="Ardivee">
 
@@ -127,6 +127,15 @@
 
         // Watch for resize event
         window.addEventListener('resize', function (event) {
+            Resize();
+        });
+
+        // Watch for orientation change
+        window.addEventListener("orientationchange", function (event) {
+            Resize();
+        });
+
+        function Resize() {
             // Rescale to fit window
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -134,7 +143,7 @@
             // Default size is 2048 / 1024
             scaleX = canvas.width / 2048;
             scaleY = canvas.height / 1024;
-        });
+        }
     </script>
 </body>
 

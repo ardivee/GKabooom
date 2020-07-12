@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <title>GKabooom</title>
     <meta name="author" content="Ardivee">
 
@@ -18,18 +18,11 @@
             background: url('assets/bg.png');
             background-size: 100% 100%;
         }
-
-        .bottom-right {
-            position: absolute;
-            bottom: 8px;
-            right: 16px;
-        }
     </style>
 </head>
 
 <body>
     <canvas id="canvas"></canvas>
-    <img src="assets/fullscreen_btn.png" id="fullscreen" class="bottom-right" />
 
     <script>
         // Holds info about the Image Source
@@ -115,24 +108,15 @@
             }
         });
 
-        // Watch for fullscreen click event
-        fullScreenBtn.addEventListener("click", function (event) {
-            if (canvas.webkitRequestFullScreen) {
-                canvas.webkitRequestFullScreen();
-            }
-            else {
-                canvas.mozRequestFullScreen();
-            }
-        });
-
         // Watch for resize event
         window.addEventListener('resize', function (event) {
-            //Resize();
+            setTimeout(function () { Resize(); }, 50);
+
         });
 
         // Watch for orientation change
         window.addEventListener("orientationchange", function (event) {
-            //Resize();
+            setTimeout(function () { Resize(); }, 50);
         });
 
         function Resize() {
